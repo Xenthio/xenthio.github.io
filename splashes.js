@@ -1,7 +1,7 @@
 var OSName="Unknown OS";
 if (navigator.appVersion.indexOf("Win")!=-1) OSName="ALT-F4";
 else if (navigator.appVersion.indexOf("Mac")!=-1) OSName="COMMAND-Q";
-else if (navigator.appVersion.indexOf("Linux")!=-1) OSName="CONTROL-Q";
+else if (navigator.appVersion.indexOf("Linux")!=-1) OSName="ALT-F4";
 
 function random_content(){
 	var tip=new Array()
