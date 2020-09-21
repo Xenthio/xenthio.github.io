@@ -62,6 +62,19 @@ function random_content(){
 	tip[54]="Rush A."
 	tip[55]="PogChamp"
 	tip[56]="Boggers"
+	tip[57]="ThyHero Collab when?"
+	tip[58]="LETS GO FELLOW GAMERS"
+	tip[59]="twitch.tv/jebook"
+	tip[60]="subscibe to jebook"
+	tip[61]="Do you want to buy solar panel?"
+	tip[62]="WELCOME TO GBJ"
+	tip[63]="subscribe to poopy stinky bum"
+	tip[64]="Super Mario 64"
+	tip[65]="Bruh moment"
+	tip[66]="Bro how do i take the L?"
+	tip[67]="ha"
+	tip[68]="i build a website using only wish.com"
+	tip[69]="this is tip 69, :)"
 	
 	var rt=Math.floor(Math.random()*tip.length)
 	
