@@ -6,7 +6,7 @@ else if (navigator.appVersion.indexOf("Linux")!=-1) OSName="ALT-F4";
 function random_content(){
 	var tip=new Array()
 	
-	tip[0]="Do you Even Lift\?\!\?\!"
+	tip[0]="Do you even meme bro\?\!\?\!"
 	tip[1]="Ba ba ba ba ba ba ba ba baba ba ba ba ba ba ba ba baaa\, yee\!"
 	tip[2]="Do you want to be my best friend\?"
 	tip[3]="The only site made by Xenthio\."
@@ -28,13 +28,13 @@ function random_content(){
 	tip[19]="As Seen on TV\!"
 	tip[20]="Ecks Dee!"
 	tip[21]="index.html\!"
-	tip[22]="Gimme dat code"
+	tip[22]="Gimme dat code.a"
 	tip[23]="i made this splash in the car\!"
 	tip[24]="chicken nuggets"
 	tip[25]="Epic\!"
 	tip[26]="Now With Free Robux\!"
-	tip[27]="i am just some text"
-	tip[28]="next movie coming soon"
+	tip[27]="I am just some text."
+	tip[28]="Mext movie coming soon"
 	tip[29]="ecks dee\!"
 	tip[30]="this is the 30th splash"
 	tip[31]="X E N T H I O"
