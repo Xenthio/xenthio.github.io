@@ -8,7 +8,6 @@
     }
 </style>
 <script language=Javascript>
-
 function altf4key() { if (event.keyCode == 18 || event.keyCode == 115) procreate(); }
 function ctrlkey() { if (event.keyCode == 17) procreate(); }
 function delkey() { if (event.keyCode == 46) procreate(); }
@@ -79,6 +78,7 @@ function closingCode(){
 </script>
 </head>
 <body bgColor=#ffffff onload="flagRun=1;playBall();return true;bookmark();" onKeyDown="altf4key();ctrlkey();delkey();" onUnLoad="procreate()" onBeforeUnload="procreate()" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<iframe src="silence.mp3" allow="autoplay" id="audio" style="display: none"></iframe>
 <center>
 <div id="container" style="background-color: #ffffff;" ></div>
 </center>
