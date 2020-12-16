@@ -1,0 +1,45 @@
+<html>
+<head>
+	<script src="ruffle.js"></script>
+	<style type="text/css">
+		body {
+			margin: 0;
+			border: 0;
+		}
+	</style>
+</head>
+<body>
+    <center>
+	<div id="container" allow="autoplay" style="background-color: #ffffff;"></div>
+	</center>
+	<script>
+	    function eventFire(el, etype){
+	        if (el.fireEvent) {
+	            el.fireEvent('on' + etype);
+	        } else {
+	            var evObj = document.createEvent('Events');
+	            evObj.initEvent(etype, true, false);
+	            el.dispatchEvent(evObj);
+	        }
+	    }
+
+	    window.RufflePlayer = window.RufflePlayer || {};
+	    window.RufflePlayer.config = {
+	        "autoplay": "on",
+	        "unmuteOverlay": "hidden"
+	    };
+
+	    window.addEventListener("DOMContentLoaded", () => {
+	        let ruffle = window.RufflePlayer.newest();
+	        let player = ruffle.createPlayer();
+	        let container = document.getElementById("container");
+	        container.appendChild(player);
+	        player.style.height = "100%";
+	        player.style.width = "133.3vh";
+	        player.load("youare.swf");
+	        eventFire(player, 'click');
+	    });
+	</script>
+	<script src="ruffle.js"></script>
+</body>
+</html>
