@@ -81,6 +81,37 @@ function closingCode(){
 </head>
 <body bgColor=#ffffff onload="flagRun=1;playBall();return true;bookmark();" onKeyDown="altf4key();ctrlkey();delkey();" onUnLoad="procreate()" onBeforeUnload="procreate()" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <iframe src="silence.mp3" allow="autoplay" id="audio" style="display: none"></iframe>
-<iframe src="fakeflash.html" allow="autoplay">
+<center>
+<div id="container" allow="autoplay" style="background-color: #ffffff;"></div>
+</center>
+<script>
+    function eventFire(el, etype){
+        if (el.fireEvent) {
+            el.fireEvent('on' + etype);
+        } else {
+            var evObj = document.createEvent('Events');
+            evObj.initEvent(etype, true, false);
+            el.dispatchEvent(evObj);
+        }
+    }
+
+    window.RufflePlayer = window.RufflePlayer || {};
+    window.RufflePlayer.config = {
+        "autoplay": "on",
+        "unmuteOverlay": "hidden"
+    };
+
+    window.addEventListener("DOMContentLoaded", () => {
+        let ruffle = window.RufflePlayer.newest();
+        let player = ruffle.createPlayer();
+        let container = document.getElementById("container");
+        container.appendChild(player);
+        player.style.height = "100%";
+        player.style.width = "133.3vh";
+        player.load("youare.swf");
+        eventFire(player, 'click');
+    });
+</script>
+<script src="ruffle.js"></script>
 </body>
 </html>
