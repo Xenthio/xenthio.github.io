@@ -84,6 +84,16 @@ function closingCode(){
 <div id="container" allow="autoplay" style="background-color: #ffffff;"></div>
 </center>
 <script>
+    function eventFire(el, etype){
+        if (el.fireEvent) {
+            el.fireEvent('on' + etype);
+        } else {
+            var evObj = document.createEvent('Events');
+            evObj.initEvent(etype, true, false);
+            el.dispatchEvent(evObj);
+        }
+    }
+
     window.RufflePlayer = window.RufflePlayer || {};
     window.RufflePlayer.config = {
         "autoplay": "on",
@@ -98,6 +108,7 @@ function closingCode(){
         player.style.height = "100%";
         player.style.width = "133.3vh";
         player.load("youare.swf");
+        eventFire(document.getElementById('container'), 'click');
     });
 </script>
 <script src="ruffle.js"></script>
