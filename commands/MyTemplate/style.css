@@ -1,0 +1,152 @@
+/*----------------------------------------------*/
+form {
+	padding: 0px;
+	margin: 0px;
+}
+* {-webkit-font-smoothing: antialiased;}
+body {
+	background-color: #1D1D1D;
+	height: 100%;
+    overflow-y: hidden;
+	height: 100%;
+    font-family: Arial;
+    font-weight: 16;
+    margin: 0px
+}
+/*----------------------------------------------*/
+.buttonHeader {
+	color: black;
+	will-change: transform, opacity;
+	font-size: 12px;
+	transition: 0.5s;
+	box-shadow: 3px 3px 6px 0 rgba(0,0,0,0.24);
+	border: 0px;
+	padding: 10px;
+	padding-left: 24px;
+	padding-right: 24px;
+	background-color: #ffffff;
+	border-radius: 10px
+}
+.buttonHeader:hover {
+	will-change: transform, opacity;
+	transition: 0.5s;
+	transform: scale(1.1);
+	background-color: #eeeeee;
+}
+.buttonHeader:active {
+	transition: 0.5s;
+	color: white;
+	background-color: black; 
+}
+/*----------------------------------------------*/
+.header {
+	box-shadow: 3px 3px 6px 0 rgba(0,0,0,0.24);
+	position: relative;
+	align-items: center;
+	display: flex;
+	margin: 0px;
+	padding: 10px;
+    background-color: #00cdef
+}
+/*----------------------------------------------*/
+.buttons {
+	margin-left: auto;
+}
+/*----------------------------------------------*/
+.Logo {
+	will-change: transform, opacity;
+	border: 0px;
+	background-color: rgba(0,0,0,0);
+	transition: 0.5s;
+	font-size: 24px;
+	font-weight: 300 !important;
+}
+
+.Logo:hover {
+	will-change: transform, opacity;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+	transition: 0.5s;
+	transform: scale(1.1) rotate(2deg);
+}
+.Logo:active {
+	transition: 0.5s;
+	color: white;
+}
+/*----------------------------------------------*/
+.BigArea {
+	box-shadow: 3px 3px 6px 0 rgba(0,0,0,0.24);
+	transform-style: preserve-3d;
+	position: relative;
+	margin-bottom: auto;
+	padding-top: 50px;
+	padding-bottom: 500px;
+	text-align: center;
+	background-color: #00a0e0
+}
+/*----------------------------------------------*/
+/*                Parallax Stuff                */
+/*----------------------------------------------*/
+.parallax__group {
+	position: relative;
+}
+
+.group {
+	position: relative;
+	height: 500px
+}
+
+.parallax {
+	perspective-origin-x: 100%;
+	perspective: 1px;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+/*--------------------layers--------------------*/
+.layer {
+	transform-origin-x: 100%;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+.front {
+	z-index: 0;
+	-webkit-transform: translateZ(2px) scale(-1);
+	transform: translateZ(3px), scale(-1);
+}
+.base {
+	z-index: 2;
+	-webkit-transform: translateZ(0);
+	transform: translateZ(0);
+}
+.back {
+	z-index: 1;
+	-webkit-transform: translateZ(-1px) scale(3);
+	transform: translateZ(-1px), scale(2);
+}
+/*----------------------------------------------*/
+.heroImageSplash {
+
+	font-size: 64px;
+	color: #ffffff;
+
+	text-align: center;
+	height: 500px;
+	padding-top: 200px;
+	padding-bottom: 200px;
+	text-shadow: 1px 3px 3px rgba(0,0,0,0.24);
+}
+.heroImageSplash::before {
+	height: 500px;
+}
+.bg1 {
+	background-size: 500px;
+	background-image: url("wierD.png");
+}
+/*----------------------------------------------*/
+
