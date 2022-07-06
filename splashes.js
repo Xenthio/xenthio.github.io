@@ -6,8 +6,8 @@ else if (navigator.appVersion.indexOf("Linux")!=-1) OSName="ALT-F4";
 function random_content(){
 	var tip=new Array()
 	
-	tip[0]="Do you even meme bro\?\!\?\!"
-	tip[1]="Ba ba ba ba ba ba ba ba baba ba ba ba ba ba ba ba baaa\, yee\!"
+	tip[0]="Hello gamrs"
+	tip[1]="Unfunny meme"
 	tip[2]="Do you want to be my best friend\?"
 	tip[3]="The only site made by Xenthio\."
 	tip[4]="&lt;center&gt;&lt;h1&gt;Now in HTML\!&lt;/h1&gt;&lt;/center&gt;"
@@ -62,7 +62,7 @@ function random_content(){
 	tip[54]="Rush A."
 	tip[55]="PogChamp"
 	tip[56]="Boggers"
-	tip[57]="ThyHero Collab when?"
+	tip[57]="Mug Moment"
 	tip[58]="LETS GO FELLOW GAMERS"
 	tip[59]="twitch.tv/jebook"
 	tip[60]="subscibe to jebook"
@@ -85,8 +85,8 @@ function random_content(){
 	tip[77]="pizza is the bread"
 	tip[78]="Where'd your mod go?"
 	tip[79]="fucker"
-	tip[80]="ThyHero wrote this."
-	tip[81]="Xentho#0729"
+	tip[80]="I wrote this."
+	tip[81]="Xentho#9999"
 	tip[82]="discord.gg/"
 	tip[83]="This meme scuks"
 	tip[84]="one too many open brackets"
