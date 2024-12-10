@@ -109,6 +109,7 @@ function random_content(){
 	tip[101]="Somewhat trustworthy!"
 	tip[102]="Now a little more competent!"
 	tip[103]="Only wastes a little bit of time!"
+	tip[104]="As seen on TV!"
 
 	var rt=Math.floor(Math.random()*tip.length)
 	
