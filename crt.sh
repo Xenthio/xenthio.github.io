@@ -4,7 +4,9 @@
 # Usage: curl -sL xenth.io/crt.sh | sudo bash
 #
 # Enables composite output for blind installs (no HDMI needed)
-# then downloads and runs the full toolkit
+# then downloads and runs the full toolkit.
+#
+# Preserves your current driver (Legacy/FKMS/KMS) unless you change it.
 #
 
 set -e
@@ -36,72 +38,108 @@ else
     echo "Warning: Could not detect Pi model"
 fi
 
-# Find config.txt location
+# Detect OS
+OS_CODENAME=$(grep VERSION_CODENAME /etc/os-release 2>/dev/null | cut -d= -f2 || echo "unknown")
+echo "OS: $OS_CODENAME"
+
+# Find config.txt location (Bookworm+ uses /boot/firmware/)
 CONFIG="/boot/config.txt"
 [[ -f "/boot/firmware/config.txt" ]] && CONFIG="/boot/firmware/config.txt"
 echo "Config: $CONFIG"
 
-# Check if composite already enabled
-if grep -q "^enable_tvout=1" "$CONFIG" 2>/dev/null; then
-    echo "Composite output already enabled in config"
-    COMPOSITE_CONFIGURED=true
-else
-    COMPOSITE_CONFIGURED=false
+# Detect current driver
+CURRENT_DRIVER="unknown"
+if grep -qE "^dtoverlay=vc4-fkms-v3d" "$CONFIG" 2>/dev/null; then
+    CURRENT_DRIVER="fkms"
+elif grep -qE "^dtoverlay=vc4-kms-v3d" "$CONFIG" 2>/dev/null; then
+    CURRENT_DRIVER="kms"
+elif command -v tvservice &>/dev/null && tvservice -s &>/dev/null; then
+    CURRENT_DRIVER="legacy"
 fi
+echo "Driver: $CURRENT_DRIVER"
 
-# Try tvservice first (works on legacy/fkms)
+# Check if composite already enabled
+COMPOSITE_ENABLED=false
+case "$CURRENT_DRIVER" in
+    kms)
+        # KMS needs ,composite parameter
+        if grep -qE "dtoverlay=vc4-kms-v3d,.*composite" "$CONFIG" 2>/dev/null; then
+            COMPOSITE_ENABLED=true
+        fi
+        ;;
+    fkms|legacy)
+        # FKMS/Legacy needs enable_tvout=1
+        if grep -q "^enable_tvout=1" "$CONFIG" 2>/dev/null; then
+            COMPOSITE_ENABLED=true
+        fi
+        ;;
+esac
+
+echo ""
+
+# Try tvservice for immediate composite (FKMS/Legacy only)
 if command -v tvservice &>/dev/null; then
-    echo ""
-    echo "Enabling composite output immediately..."
+    echo "Enabling composite output immediately via tvservice..."
     tvservice -c "NTSC 4:3" 2>/dev/null || true
     fbset -depth 8 2>/dev/null && fbset -depth 16 2>/dev/null
     sleep 1
     echo "Composite should now be active!"
 fi
 
-# Ensure composite is enabled in boot config
-if [[ "$COMPOSITE_CONFIGURED" == "false" ]]; then
+# Enable composite in boot config if needed
+if [[ "$COMPOSITE_ENABLED" == "false" ]]; then
     echo ""
-    echo "Adding composite output to boot config..."
+    echo "Configuring composite output in boot config..."
     
     # Backup config
     cp "$CONFIG" "${CONFIG}.bak.$(date +%Y%m%d%H%M)" 2>/dev/null || true
     
-    # Check for existing Pi4 section
-    if grep -q "^\[pi4\]" "$CONFIG"; then
-        # Add to existing [pi4] section
-        sed -i '/^\[pi4\]/a enable_tvout=1\nsdtv_mode=0\nsdtv_aspect=1\nhdmi_ignore_hotplug=1' "$CONFIG"
-    else
-        # Add new section
-        cat >> "$CONFIG" << 'EOF'
-
-# Pi CRT Toolkit - Composite Output
-[pi4]
-enable_tvout=1
-sdtv_mode=0
-sdtv_aspect=1
-hdmi_ignore_hotplug=1
-
-[all]
-EOF
-    fi
+    case "$OS_CODENAME" in
+        trixie|bookworm)
+            # Trixie/Bookworm: Add ,composite to KMS overlay
+            if grep -qE "^dtoverlay=vc4-kms-v3d$" "$CONFIG"; then
+                # Plain kms overlay - add composite
+                sed -i 's/^dtoverlay=vc4-kms-v3d$/dtoverlay=vc4-kms-v3d,composite/' "$CONFIG"
+                echo "Added ,composite to vc4-kms-v3d overlay"
+            elif grep -qE "^dtoverlay=vc4-kms-v3d," "$CONFIG"; then
+                # KMS with options - add composite if not present
+                if ! grep -qE "composite" "$CONFIG"; then
+                    sed -i 's/^dtoverlay=vc4-kms-v3d,/dtoverlay=vc4-kms-v3d,composite,/' "$CONFIG"
+                    echo "Added composite to existing vc4-kms-v3d overlay"
+                fi
+            else
+                # No KMS overlay - add full config
+                echo "" >> "$CONFIG"
+                echo "[pi4]" >> "$CONFIG"
+                echo "dtoverlay=vc4-kms-v3d,composite" >> "$CONFIG"
+                echo "hdmi_ignore_hotplug=1" >> "$CONFIG"
+                echo "[all]" >> "$CONFIG"
+                echo "Added composite KMS config"
+            fi
+            ;;
+        *)
+            # Older OS: Use enable_tvout
+            if ! grep -q "^enable_tvout=1" "$CONFIG"; then
+                echo "" >> "$CONFIG"
+                echo "# CRT Toolkit - Composite Output" >> "$CONFIG"
+                echo "enable_tvout=1" >> "$CONFIG"
+                echo "hdmi_ignore_hotplug=1" >> "$CONFIG"
+                echo "Added enable_tvout=1"
+            fi
+            ;;
+    esac
     
-    echo "Boot config updated!"
-    
-    # If tvservice wasn't available, we need a reboot
+    # Check if we need a reboot (no tvservice available)
     if ! command -v tvservice &>/dev/null; then
         echo ""
         echo "═══════════════════════════════════════════════"
         echo "  REBOOT REQUIRED"
         echo "═══════════════════════════════════════════════"
         echo ""
-        echo "tvservice is not available (full KMS driver)."
         echo "Composite output has been configured but requires"
-        echo "a reboot to take effect."
+        echo "a reboot to take effect (Full KMS driver)."
         echo ""
-        echo "After reboot, run this script again to continue"
-        echo "installation, or run:"
-        echo "  sudo crt-toolkit"
+        echo "After reboot, run: sudo crt-toolkit"
         echo ""
         read -p "Reboot now? [Y/n] " -n 1 -r
         echo
@@ -122,6 +160,12 @@ echo ""
 if ! command -v git &>/dev/null; then
     apt-get update -qq
     apt-get install -y -qq git
+fi
+
+# Install libdrm-tests for modetest (KMS needs this)
+if [[ "$CURRENT_DRIVER" == "kms" ]] && ! command -v modetest &>/dev/null; then
+    echo "Installing DRM tools for KMS..."
+    apt-get install -y -qq libdrm-tests 2>/dev/null || true
 fi
 
 # Download toolkit
