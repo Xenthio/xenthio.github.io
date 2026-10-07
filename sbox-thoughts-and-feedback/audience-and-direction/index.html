@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Audience and direction - s&amp;box thoughts</title>
+</head>
+<body>
+  <h1>Audience and direction</h1>
+  <p><a href="../index.html">Back to index</a></p>
+  <p>S&amp;box is great, but in some ways it was greater. I don't think it ever truly fell to shit. It's a good engine, and I can be satisfied with parts of its new direction while still feeling like I got my hopes up for something I never ended up getting.</p>
+  <p>I think the bigger picture is why people came to GMod, and what they expect out of s&amp;box. My entity opinions are in their <a href="../entities-and-workflow/index.html">own section</a>, because I've said them over and over and people don't really want to hear those again lol.</p>
+  <ul>
+    <li><a href="#audience">What people came for</a></li>
+    <li><a href="#systems-and-tools">The systems and tools I came for</a></li>
+    <li><a href="#developer-interest">Developer interest and content</a></li>
+    <li><a href="#game-details">The game details</a></li>
+    <li><a href="#re-sourceification">Re-sourceification</a></li>
+    <li><a href="#game-tests">What the games need to test</a></li>
+  </ul>
+
+  <h2 id="audience">What people came for</h2>
+  <p>There are a few overlapping reasons people came to GMod:</p>
+  <ul>
+    <li>It let them have fun in Half-Life 2.</li>
+    <li>It had wacky toys to play with.</li>
+    <li>It had a low barrier to making wacky toys to play with.</li>
+    <li>It was Source engine, and they came to s&amp;box wanting an easier Source 2 with all the bells and whistles and tried-and-tested things from Source.</li>
+  </ul>
+  <p>Classic GMod worked because it was essentially taking a game and slapping a sandbox onto it. You had all these serious characters, but now you were spawning explosive barrels in an important cutscene, killing NPCs that mattered to the scripted sequence, and just breaking shit. Then you'd clean up the map with a button and start again. Spawn some ragdolls, do something stupid. It was a silly time.</p>
+  <p>Later, it was still unique because of dupes, building and that huge library of odd props. Some were obviously made for one specific part of a map, but people found creative uses for them. Those massive closing doors from Half-Life 2's airboat section, maybe called floodgates, are some of the props I remember seeing used in the most unexpected ways.</p>
+  <p>Then there was the scripting. You'd find a script online, change some numbers, and learn how to make things. You didn't have to figure out a giant editor or a bunch of prefabs. You could be on a server, find some documentation and just shit something out in the moment. Changes would hotload and apply to everyone most of the time. You already had enemies from a favourite game, so why not make a rocket launcher that fires 10,000 rockets a second? It didn't have to make sense.</p>
+  <p>But you didn't need to care about Half-Life to get into GMod. I played GMod first, after watching YouTubers play Deathrun and shit around 2014. I just downloaded maps. Half-Life 2 wasn't part of the equation. A bunch of people I knew at school had GMod without knowing what Half-Life was.</p>
+  <p>GMod brought me to Half-Life 2. Then I went back to GMod because it was fun, learned a bit of Source modding, tried modding Half-Life 2, realised that kind of sucks, and went back to GMod modding. Eventually I was there because I liked developing in Source but didn't want to use C++.</p>
+  <p>So the Source engine knobheads and the GMod knobheads aren't necessarily the same crowd. Some are there for the engine, some for GMod itself, including things like RP. Then there are outside game devs, the inner circle who found a use for s&amp;box and probably give the most feedback, and passersby. I've been in most of those groups except the first. They're not neat boxes.</p>
+  <p>It was the Source development part that got me into early s&amp;box the most. I was desperately looking for alternatives, watching community versions of Source that seemed to go nowhere. Then s&amp;box showed up and it was like, oh my God, Source 2. This thing you'd really only seen in Dota 2 and the new-at-the-time Half-Life Alyx.</p>
+  <p>Those expectations didn't come from nowhere. <a href="https://facepunch.com/">Facepunch calls it a spiritual successor to Garry's Mod</a>, and <a href="https://www.pcgamer.com/gaming-industry/garrys-mod-successor-s-and-box-goes-open-source-and-even-opens-up-the-finances-garry-says-valve-gave-me-my-chance-im-already-rich-i-dont-want-to-f-ck-anyone-over/">PC Gamer reported Facepunch describing it as a love letter to Source 2</a>. A more generic engine wasn't what I came here for.</p>
+
+  <h2 id="systems-and-tools">The systems and tools I came for</h2>
+  <p>Unity always felt like a "figure yourself out" kind of thing to me. Sure, it could make all sorts of games, but I didn't like being dropped into an empty project. Unreal gave you a bit more, but Blueprints put me off. That's my experience with them, not a claim that they have no templates or other ways to work.</p>
+  <p>Source felt like a low barrier to making a first-person shooter, and a medium barrier to making other things. Unity felt like medium difficulty for both. That's a loose way of putting it, but the difference mattered to me. Source had been used for real games. It was dependable.</p>
+  <p>With Source and the game code and content around it, you had NPC combat, physics sounds, impacts, fire, bullets, ragdolls and NPCs flinching. Even weird things like NPC hearing and the scent system. You could go in more as a player than a fully polished game dev, say "I want to make this idea", and not have to build all the stuff you wouldn't normally think about.</p>
+  <p>I'm gonna be honest, I don't want to implement every one of those systems myself. They don't all have to live in the engine itself, but I want them to be there and work together.</p>
+  <h3 id="simulate">The Simulate loop</h3>
+  <p>Another thing was the networking, specifically the Simulate loop. You'd write gameplay or movement code and it would run on the client and server. The client predicted it and the server ran the authoritative version. It was neat to write code normally and have that setup protect against cheat buffoonery where a client tried to fake the outcome.</p>
+  <p>You could make flying an actual mechanic without also going through some separate anti-fly middleware. I'm talking about sharing the movement logic instead of writing another set of plausibility rules for each mechanic, not magically preventing every kind of cheat.</p>
+  <p>Early s&amp;box moved a lot of this into managed code. I could look in the base add-on, copy something into my project and modify it. It had lag compensation, and I didn't have to launch another client and wait 30 seconds just to test most things.</p>
+  <h3 id="particles">Tools made for the job</h3>
+  <p>The particle editor was tried and tested. Even with its limitations, every time I wanted something specific I could usually get it done in some weird way. It was great to work with from code too. I remember using control points and later named variables, though I might be mixing up the exact APIs.</p>
+  <p>When I worked with the newer particle setup, it felt flattened into another prefab in a generic editor. It didn't feel like an experience built for making particles. I know things have improved over time, but that's the feeling I'm describing.</p>
+  <p>Early s&amp;box didn't have everything either. There wasn't an NPC framework, which I would've liked, and the physics sounds weren't ideal. But it kept a lot of the feeling of being able to jump in and make something.</p>
+
+  <h2 id="developer-interest">Developer interest and content</h2>
+  <p>I think s&amp;box has struggled on developer interest. It's a spectacular engine and great to use, but for the life of me I couldn't convince any of my Unity or Godot friends to give it a chance. That's my circle, not the whole market, but it makes me wonder what gives someone a reason to switch.</p>
+  <p>I remember having something like 200 entity-system projects and about 20 scene-system projects, with none of the latter finished. Those are rough memories of my own folders, not proof of what everyone else is doing. But there's a real difference in how often I felt like starting something and seeing it through.</p>
+  <p>The same gap shows up for players. Sandbox has felt extremely bare to me, with very little in some add-on categories. If someone arrives expecting a pile of interesting things to mess with, who the hell is sticking around for that lol.</p>
+  <h3 id="quick-experiments">What a quick experiment starts with</h3>
+  <p>At the <a href="https://store.steampowered.com/app/590830/sbox/">28 April 2026 Steam release</a>, the prominent games I remember were a CS:GO-style case-opening simulator, Mow the Lawn and s&amp;business. I was already around in beta, so this wasn't my first impression. But those were the games greeting people when it released. My point is that the low-effort games felt even more low-effort than low-effort games in GMod, because they had so much less to work with from the start. A <a href="https://playtestthoughts.com/s-box-can-lightning-strike-twice/">review from 8 May</a> describes those kinds of games as popular too, although that doesn't establish the exact release-day order.</p>
+  <p>There were plenty of people there to get that first impression. <a href="https://steambase.io/games/s-box/steam-charts">Steambase records 6,762 concurrent players on release day</a>. That's the post-release peak in its data, not the all-time peak including the preview: <a href="https://steamdb.info/app/590830/charts/">SteamDB records a higher peak on 7 April</a>. Those app-wide numbers don't tell me which game made someone leave.</p>
+  <p>What bothers me is what a rough project starts with. In GMod, even a low-effort experiment could have NPCs, fire, guns and team-based multiplayer because those systems were already available. You could take something that existed and mess with it. Starting closer to nothing changes the amount of interesting behaviour you can get out of a quick stupid idea.</p>
+  <p>You can see what that foundation gives you in games like <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=135509255">PropHunt (Hide'n'Seek) - Original</a>, which shares lots of GMod's base systems, all the way to <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=104625632">Extreme Football Throwdown</a>, a completely different kind of game from GMod's basic FPS.</p>
+  <p>I remember Extreme Football Throwdown being awesomely funny because it still had all those systems. Things would explode and push things around, light you on fire, crush you, run you over or spawn 300 manhacks as a sudden death. All sorts of things you wouldn't get handed to you in a Unity-style empty game template.</p>
+  <p>Having those systems doesn't force anyone to use them well. But I think it gives them more to work with, and that matters for the kind of content people come here to play.</p>
+
+  <h2 id="game-details">The game details</h2>
+  <h3 id="physics-sounds">Physics sounds and surfaces</h3>
+  <p>The physics sounds still suck ass to my ears. Every bit of metal impact sounds like an oil drum lol. I remember Half-Life Alyx having much more variation for small boxes, big boxes and boxes with stuff in them. GMod had lots too. Without that differentiation, the world sounds hollow.</p>
+  <p>For TTT I ended up overwriting the base surface system and porting a bunch of the Alyx surfaces. It's another one of those game details I wanted to already have there.</p>
+  <h3 id="water-and-gibs">Water and prop gibs</h3>
+  <p>On launch day, in Sandbox's default map, I remember the water being a blue flat plane that wasn't even transparent, with a very blurry cubemap. Go underwater and it didn't render from the other side. There were no underwater effects; it didn't even look like there was water anymore. You'd only know because you were in swim movement mode.</p>
+  <p>Props fell right through. They didn't float or slow down at all lol. I still think the underwater rendering looks missing, though I haven't checked every part of that launch-day behaviour again. Swimming existed; the presentation and physics didn't feel joined up.</p>
+  <p>I also sent fixes for prop gib velocity and for burning props to leave their gibs on fire. My <a href="https://github.com/Facepunch/sbox-public/pull/11079">gib-velocity PR</a> was accepted and merged upstream before being closed on GitHub. The <a href="https://sbox.game/news/update-26-06-10">10 June release notes</a> credit that change, and the <a href="https://sbox.game/news/update-26-05-27">27 May release notes</a> credit the burning-gib change.</p>
+  <p>There was also a <a href="https://github.com/Facepunch/sandbox/pull/274">separate Sandbox change</a> to apply a bullet's impulse before its damage. My demonstration used both fixes. I'm not sure where that companion change stands today, so I'm not claiming the engine fix was rejected or that I've verified the current Sandbox result.</p>
+  <p>These are basic details that I feel are easy to overlook while working on the bigger engine tools. A game built around them would put them in front of the people making those tools every day.</p>
+
+  <h2 id="re-sourceification">Re-sourceification</h2>
+  <p>Wait! Wait though, I know it's coming from me and I'm the funny "I want entities back guy", but that's not what I mean this time (though I wouldn't be opposed lol). I acknowledge the current scene and components system works for others better than it does for me. Yet again, you can read <a href="../entities-and-workflow/index.html">my thoughts on it here</a>.</p>
+  <p>I honestly think s&amp;box would benefit from a "re-sourceification". Mostly I mean bringing back the useful systems we had in Source, how they worked together, and how they were tried and tested. There's also the benefit of appealing to that Source developer base again. The small games I'm talking about are a way to build, exercise and prove those systems. I think that could bring back developer interest, which brings content, which brings players looking for experiences. The content still has to be good and people have to find it, but that's the direction I want to see.</p>
+  <p>The Half-Life heads who came specifically because GMod was Half-Life 2 probably can't be captured in quite the same way. But Facepunch could make something inspired that people can play, modify and fuck around in. Something that gives the engine the same benefit of being built for a real game.</p>
+  <h3 id="current-game-scope">A couple of small games, including an FPS</h3>
+  <p>I think it would need to be a couple of small, complete, playable games. Not a whole Half-Life 2-sized campaign. Enough to stretch the limbs of the engine and find what would actually block someone from making a bigger game.</p>
+  <p>At least one should be an FPS. My impression of the experiments I've seen is that, in moving away from being an FPS engine, the first-person side hasn't had the same attention. I don't know the whole catalogue or what went into those decisions. But the core Sandbox game is itself an FPS, and it needs that work too.</p>
+  <p>Facepunch needs to make its Half-Life to its GMod. Make games that reveal what the engine is missing, then make those systems useful in Sandbox and in other people's games. That last bit has to be deliberate, or you just end up with another game's bespoke fixes.</p>
+  <p>As for whether the games, systems, networking or modding should come first, I have no idea. I just think actually making these games would give everyone working on the engine a much more direct look at what's missing.</p>
+
+  <h2 id="game-tests">What the games need to test</h2>
+  <p>These are questions I've run into in my own experiments. I've often struggled to get the result I needed, and in some cases I remember it being much easier before.</p>
+  <ol>
+    <li>Can we make cutscenes and characters with facial expressions?</li>
+    <li>Can we get animated humanoid enemies that look good?</li>
+    <li>Is the networking stack mature enough to tackle all kinds of cheating?</li>
+    <li>Can the engine handle quick scene resets from file for round-based gameplay cleanup after every round?</li>
+    <li>Can it handle large amounts of networked props?</li>
+  </ol>
+  <h3 id="reset-humanoids-clarification">Humanoids and round resets</h3>
+  <p>I think animated humanoids are probably possible from my end. They're just not as easy as they were for me in Source, or close to the quality I wanted from s&amp;box when it shared systems with Half-Life Alyx. The animation workflow I've encountered feels much more geared around players and weapons than high-quality NPCs with natural locomotion.</p>
+  <p>I don't have the skill or close access to animators. That is part of my situation, and I don't want this to turn into "Here's my demands of what Facepunch should make for me mwuahhahah!!" I think Facepunch should want these things for its own Sandbox mode and games too.</p>
+  <p>Round reset was something I used all the time. I had it on a keybind. In gameplay it would run at the end or beginning of a round: put the props back, respawn the broken ones, repair the windows and randomise the weapons.</p>
+  <p>I remember the old reset in Source and s&amp;box respawning entities without noticeable stutter. It felt like it was handled deeper than I could reasonably reproduce from my own game. When I tried replacing it, I got stutter for all clients, and at one point it even broke networking. That's the comparison from my experience, not a claim that every current project behaves that way.</p>
+  <p>A couple of real games would put these questions to use instead of leaving each developer to discover the same rough edges alone. That's the part of Source I want back: a world with things in it that already work, and enough freedom to make something stupid or something good out of them.</p>
+  <p><a href="../entities-and-workflow/index.html">Next: Entities and workflow</a></p>
+  <p><a href="../index.html">Back to index</a></p>
+</body>
+</html>

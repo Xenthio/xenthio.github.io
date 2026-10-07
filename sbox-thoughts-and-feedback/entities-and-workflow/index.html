@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Entities and workflow - s&amp;box thoughts</title>
+</head>
+<body>
+  <h1>Entities and workflow</h1>
+  <p><a href="../index.html">Back to index</a>. <a href="../audience-and-direction/index.html">Audience and direction</a>.</p>
+  <p>God, I really feel like I'd personally want the entities back. But I know that's such a personal preference, and some people really disagree with me on it.</p>
+  <p>I've often had responses in the Discord saying I'm just used to the weird way of working, or that entities actually sucked. It's also been said they worked for me because I mostly make first-person shooters, which is completely fair.</p>
+  <p>That's why these concerns are in their own section. I've said them over and over, and people don't really want to hear them again lol. I don't think it's feasible to throw out all the scene system work. I think there's a better compromise; I just don't know exactly what it is.</p>
+  <ul>
+    <li><a href="#code-defined-objects">Code, definitions and ownership</a></li>
+    <li><a href="#components">How I used components</a></li>
+    <li><a href="#object-identity">What did my ray hit?</a></li>
+    <li><a href="#weapon-modding-ttt">Weapon modding and TTT</a></li>
+    <li><a href="#modding">Loading a mod and finding its objects</a></li>
+  </ul>
+
+  <h2 id="code-defined-objects">Code, definitions and ownership</h2>
+  <p>I'm a programmer, not an artist. I get why prefabs are easier for an artist to go in and modify. But I preferred everything being in code, and that wasn't a problem because code would hotload immediately. Updating code was already updating things at runtime.</p>
+  <p>I could go into Visual Studio and change something. I didn't have to faff about in 10 different prefabs, manage 10 tabs or scroll through 50 components on the player prefab to edit one variable.</p>
+  <p>Making prefabs feels like writing FGD files again. I write some code, but then I have to go somewhere else and define an in-world object to make it work. Early s&amp;box got me hooked on generating that from C# attributes. Write some code. Now there's an object. It exists. You can place it. That was awesome.</p>
+  <p>There were still two places to define how the model looked: OnSpawn and the editor representation in the attributes. But they were right next to each other and easy to manage. With an object-oriented language like C#, writing a class and then creating an instance of it just made sense to me.</p>
+  <p>Every time I make a prefab, I end up wanting to write code that doesn't really make sense as a reusable component. So I make a very specifically named component, and it sucks. I'd rather slap the code into the definition I'm already working on. Then it's like, why am I manually making this definition as well?</p>
+  <p>Scenes are cool with how universal they are. They're probably a better fit for some things that aren't Sandbox or a first-person shooter. But for the stuff I make, they feel too generic. I want to know where everything is in code. I don't like things jumping into some weird resource system for the sake of a resource system. It's moving parts I don't want.</p>
+
+  <h2 id="components">How I used components</h2>
+  <p>The funny thing is, I liked components. I don't think many people were using the original entity components as much as I was, at least from the public code I saw. Being labelled someone who just wants the old Source ways doesn't really fit how I was working.</p>
+  <p>I had my own version of those components running in a Simulate loop. I'd swap them out for different movement modes. Turn noclip on, add the flying controller, remove the old controller. You didn't need the rest of the character controller in noclip, just something applying velocity to position. That felt like a logical use of components.</p>
+  <p>I also liked that early s&amp;box got rid of some of the old entity baggage. I didn't need to specify fly, ground, bounce or whatever the hell the old movement modes were. I'm not asking for every old restriction back.</p>
+  <p>What bothers me now is treating every object as a container first. Components feel forced into places where I just want to make a thing.</p>
+
+  <h2 id="object-identity">What did my ray hit?</h2>
+  <p>When I think about a game from a programming standpoint, an object is something. It's a prop, a weapon, a player or an NPC. With scenes I often feel like I'm working with a shell that happens to have a model renderer and a bunch of other things inside it.</p>
+  <p>I end up forcing the root object to be the thing in question, using game objects in a weird entity-like way. That makes sense to me.</p>
+  <p>If I trace a ray from a bullet function and hit something, I want to look at something like <code>trace.entity</code> and know that's the thing I hit. Instead I find myself checking whether the game object is valid, looking for a player component, then figuring out whether I'm even looking at the right object in the hierarchy. It's a bunch of nonsense for what should be a simple interaction.</p>
+  <p>Of course I still need to check what kind of entity it is. What I miss is a clear place where the gameplay identity lives. It's not just about saving a line of code.</p>
+
+  <h2 id="weapon-modding-ttt">Weapon modding and TTT</h2>
+  <p>Modding was one of the biggest strengths of that setup. You could derive from Weapon, set the fire rate to 10 million and override Shoot to make it spawn rockets instead. You didn't have to open a giant editor and whatever editor plugins a developer had made for their game.</p>
+  <p>When I made a weapon for Sandbox, the game mode inside s&amp;box, it felt like entities with extra steps. There was a base gun component to derive from, but then a prefab and a resource definition to get it into the spawn menu.</p>
+  <p>I remember separate prefabs for the model in your hand, the view model in the camera and the dropped weapon, plus definitions around them. I might be mixing up the exact file count, but I remember the extra wiring very well. I've only bothered making one weapon that way. It wasn't nice.</p>
+  <p>Porting the entity-system TTT game mode to scenes made it even more obvious. I got it down to three files per weapon because I wanted to do it the proper way, and it was still a drag getting all the weapons in.</p>
+  <p>Previously I'd copy the code file, change the class name and change the things that made the weapon different. Now I was copying prefabs and pointing them at different models as well. I suppose it's artist-friendly. Some regular guy can go in and edit it. But it didn't feel modder-friendly to me.</p>
+  <p>I also remember getting dismissive responses when I suggested doing things more like entities. Being told you're doing it wrong when you're trying to make the thing work isn't fun. That's my experience of those conversations, not everyone in the Discord.</p>
+
+  <h2 id="modding">Loading a mod and finding its objects</h2>
+  <p>With the old entity-system TTT, adding a new class was enough for a lot of modding. It didn't even have to live in the same namespace or assembly. We didn't have to build a whole separate modding SDK to make that basic workflow happen.</p>
+  <p>The newer resource-associated approach I've used felt narrower: add a resource and maybe code alongside it. What I wanted was also the broader kind of add-on that loads at game start and hooks into something like drawing a custom HUD. I don't know where every part of that stands now, but that was the freedom I was missing.</p>
+  <p>I don't think scenes make assembly loading or hooks impossible. I got too caught up in that when trying to explain it. The awkward bit for me was how a mod's new object became something the game knew how to find and use.</p>
+  <p>An entity derived from a weapon class already meant something when I spawned it. With prefabs, I needed a way to say which ones were weapons. My workaround was to put them in a weapons folder and treat everything in there as a weapon. At the time I couldn't quickly query all prefabs for the component I needed. Maybe that's easier now.</p>
+  <p>You still need some way to discover a list of things either way. But the class-based meaning and the way it fitted into my game felt much more direct before.</p>
+  <p>There's gotta be some outdated opinions in here. I know things have got better. What I'm trying to get across is why the workflow felt like a step backwards to me, even though the engine became more general.</p>
+  <p>I still personally want entities back. But the <a href="../audience-and-direction/index.html#systems-and-tools">ready-made systems, networking and specialised tools</a> matter beyond that preference. Those are things I want people to be able to build on, whatever sits underneath them.</p>
+  <p><a href="../index.html">Back to index</a></p>
+</body>
+</html>
